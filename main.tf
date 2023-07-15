@@ -50,3 +50,17 @@ resource "aws_security_group" "web_traffic" {
   }
 
 }
+resource "aws_instance" "frontend" {
+
+  ami                    = "ami-0d13e3e640877b0b9"
+  instance_type          = "t2.micro"
+  key_name               = "Ansible"
+  vpc_security_group_ids = [aws_security_group.web_traffic.id]
+  user_data              = file("userdata.sh")
+  tags = {
+    "Name"    = "Webserver",
+    "Project" = var.project_name,
+    "Env"     = var.project_env
+  }
+}
+
